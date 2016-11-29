@@ -1,0 +1,50 @@
+http://projects.spring.io/spring-cloud/#quick-start   官网
+https://eacdy.gitbooks.io/spring-cloud-book/content/  中文概念
+http://blog.didispace.com/springcloud2/   最佳实践
+
+http://m.blog.csdn.net/article/details?id=53282031  快速实践
+
+http://www.roncoo.com/course/list.html
+
+http://www.iqiyi.com/w_19rsveqlhh.html
+
+
+spring-cloud-starter-parent 具备spring-boot-starter-parent同样功能并附加Spring Cloud的依赖  
+spring-cloud-starter-config 默认的配置服务依赖，快速自动引入服务的方式，端口8888  
+spring-cloud-config-server／client 用户自定义配置服务的服务端／客户端依赖  
+spring-cloud-starter-eureka-server 服务发现的Eureka Server依赖  
+spring-cloud-starter-eureka 服务发现的Eureka客户端依赖  
+spring-cloud-starter-hystrix／zuul／feign／ribbon 断路器（Hystrix），智能路有（Zuul），客户端负载均衡（Ribbon）的依赖  
+angular-ui-router 页面分发路由依赖  
+
+
+
+配置服务器、 --- cloud-config-server
+注册服务器、 --- cloud-eureka-server
+微服务服务端 --- cloud-simple-service 1、读取远程db配置；2、提供服务，将服务注册到eureka-server服务器上
+webui客户端  --- cloud-simple-ui(重点：实践)
+	知识点：
+        1）@SpringBootApplication相当于@Configuration、@EnableAutoConfiguration、@ComponentScan三个注解合用。
+	@EnableEurekaClient配置本应用将使用服务注册和服务发现，注意：注册和发现用这一个注解。
+	@EnableHystrix表示启用断路器，断路器依赖于服务注册和发现。
+	这里使用了断路器，就是@HystrixCommand注解。断路器的基本作用就是@HystrixCommand注解的方法失败后，系统将自动切换到	fallbackMethod方法执行。断路器Hystrix具备回退机制、请求缓存和请求打包以及监控和配置等功能，在这里我们只是使用了它的		核心功能：回退机制，使用该功能允许你快速失败并迅速恢复或者回退并优雅降级。
+
+Eureka: 服务注册中心. 我们的REST服务在启动的时候会将自己的地址注册到Eureka, 其他需要该服务的应用会请求Eureka进行服务寻址, 得到目标服务的ip地址之后就会使用该地址直连目标服务.
+Ribbon: 客户端负载均衡类库. 当客户端请求的目标服务存在多个实例时, Ribbon会将请求分散到各个实例. 一般会结合Eureka一起使用.
+Feign: HTTP客户端类库. 我们使用Feign提供的注解编写HTTP接口的客户端代码非常简单, 只需要声明一个Java接口加上少量注解就完成了.
+      详情参考：http://blog.csdn.net/neosmith/article/details/52449921
+http://www.tuicool.com/articles/AF3qAfA
+
+
+
+服务发现
+Spring Cloud通过Netflix OSS的Eureka来实现服务发现，服务发现的主要目的是为了让每个服务之间可以互相通信。Eureka Server为微服务的注册中心。谈到Spring Cloud Netflix，它是Spring Cloud的子项目之一，主要提供的模块包括：服务发现（Eureka），断路器（Hystrix），智能路有（Zuul），客户端负载均衡（Ribbon）等。
+Spring Cloud使用注解的方式提供了Eureka服务端（@EnableEurekaServer）和客户端（@EnableEurekaClient）。
+路由网关
+路由网关的主要目的是为了让所有的微服务对外只有一个接口，我们只需访问一个网关地址，即可由网关将所有的请求代理到不同的服务中。Spring Cloud是通过Zuul来实现的，支持自动路由映射到在Eureka Server上注册的服务。Spring Cloud提供了注解@EnableZuulProxy来启用路由代理。
+负载均衡
+Spring Cloud提供了Ribbon和Feign作为客户端的负载均衡。在Spring Cloud下，使用Ribbon直接注入一个RestTemplate对象即可，此RestTemplate已做好负载均衡的配置；而使用Feign只需定义个注解，有@FeignClient注解的接口，然后使用@RequestMapping注解在方法上映射远程的REST服务，此方法也是做好了负载均衡配置。
+断路器
+断路器（Circuit Breaker）主要是为了解决当某个方法调用失败的时候，调用后备方法来替代失败的方法，已达到容错／阻止级联错误的功能。Spring Cloud使用@EnableCircuitBreaker来启用断路器支持，使用@HystrixCommand的fallbackMethod来指定后备方法。（@HystrixCommand(fallbackMethod="fallbackOper")）
+Spring Cloud还提供了一个控制台来监控断路器的运行情况，通过@EnableHystrixDashboard注解开启。
+Spring Cloud依赖库
