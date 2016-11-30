@@ -1,2 +1,13 @@
-1、配置中心
-2、服务路由
+1、服务注册
+2、服务定义
+3、分布式配置中心(可先不用) --- 如何通过Spring Cloud Bus来实现以消息总线的方式进行通知配置信息的变化，完成集群上的自动化更新
+4、服务路由 --- 跟feign和ribbon的区别是什么
+
+
+最佳实践：
+http://blog.didispace.com/categories/Spring-Cloud/
+代码地址：https://git.oschina.net/didispace/SpringBoot-Learning
+
+http://www.cnblogs.com/skyblog/p/5127712.html
+代码地址：https://git.oschina.net/zhou666/spring-cloud-7simple
+代码地址：https://github.com/zpng/spring-cloud-7simple
