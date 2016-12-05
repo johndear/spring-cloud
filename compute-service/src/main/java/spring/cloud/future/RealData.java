@@ -9,9 +9,8 @@ public class RealData implements Callable {
 		this.data = data;
 	}
 
-	@Override
 	public String call() throws Exception {
-		// 利用sleep方法来表示真是业务是非常缓慢的
+		// 鍒╃敤sleep鏂规硶鏉ヨ〃绀虹湡鏄笟鍔℃槸闈炲父缂撴參鐨�
 		try {
 			Thread.sleep(8000);
 		} catch (InterruptedException e) {
