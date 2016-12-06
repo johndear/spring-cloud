@@ -1,43 +1,44 @@
 package spring.cloud.simple;
 
-import java.util.concurrent.Callable;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+import spring.cloud.async.ICountService;
 import spring.cloud.dao.UserMapper;
 
-public class CountService implements Callable {
-	
-    private UserMapper userMapper;
-    private String id;
-    private String type;
-    private String datasource;
-    private String method;
-    private String startDate;
-    private String endDate;
-    private String name;
-	
-    private long waitTime; 
-    public CountService(String name, int timeInMillis, UserMapper userMapper,String id, String type, String datasource, String method, String startDate, String endDate){ 
-        this.name=name;
-    	this.waitTime=timeInMillis;
-        this.userMapper = userMapper;
-        this.id=id;
-        this.type=type;
-        this.datasource=datasource;
-        this.method=method;
-        this.startDate=startDate;
-        this.endDate=endDate;
-    }
-    @Override
-    public String call() throws Exception {
-    	borrowAmount(name, id, type, datasource, method, startDate, endDate);
-    	//        Thread.sleep(waitTime);
-        //return the thread name executing this callable task
-        return Thread.currentThread().getName();
-    }
+import com.alibaba.fastjson.JSONObject;
 
-    public int borrowAmount(String name, String id, String type, String datasource, String method, String startDate, String endDate){
+@Service
+public class CountService implements ICountService{
+	
+	@Autowired
+    private UserMapper userMapper;
+	
+    public Object invoke(JSONObject newJson){
+    	final String itemId = newJson.getString("itemId");
+        final String type = newJson.getString("type");
+        final String datasource = newJson.getString("datasource");
+        final String startDate = newJson.getString("startDate");
+        final String endDate = newJson.getString("endDate");
+		final String method = newJson.getString("method");
+		
+		return borrowAmount(itemId, type, datasource, method, startDate, endDate);
+	}
+    
+    /**
+	 * 
+	 * @param id
+	 * @param type 1：借 2：贷 3：借减贷 4：贷减借
+	 * @param datasource
+	 * @param method 1:汇总科目金额 2:汇总科目及其子科目金额
+	 * @param startDate
+	 * @param endDate
+	 * 统计维度：科目     提取方向     数据来源     汇总方法     核算有效期
+	 */
+	public Map<String, String> borrowAmount(String id, String type, String datasource, String method, String startDate, String endDate){
 		Integer amount = 0;
 		// 单向：借、贷
 		if("1".equals(type) || "2".equals(type)){
@@ -67,9 +68,11 @@ public class CountService implements Callable {
 
 		}
 		
-		System.out.println(name+"，aaa=======" + amount);
-		return amount;
+		Map<String, String> result = new HashMap<String, String>();
+		result.put(id, amount.toString());
+		
+		return result;
 		
 	}
- 
+
 }
