@@ -7,7 +7,9 @@ import java.util.concurrent.ExecutorCompletionService;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import spring.cloud.simple.CountService;
+import spring.cloud.simple.ICountService;
+import spring.cloud.simple.impl.CountService;
+import spring.cloud.web.SpringUtil;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
@@ -20,7 +22,7 @@ import com.alibaba.fastjson.JSONObject;
  */
 public class MyAsyncTaskExecutor {
 	
-	public void excute(String json, final ICountService countService){
+	public void excute(String json){
 		ExecutorService executor = Executors.newFixedThreadPool(20); 
 		CompletionService<Object> completionService = new ExecutorCompletionService<Object>(executor);
 
@@ -31,6 +33,8 @@ public class MyAsyncTaskExecutor {
 	    			
 	    			public Object call() throws Exception {
 //					 	Thread.currentThread().sleep(new Random().nextInt(5000));
+	    				String function = newJson.getString("function");
+	    				ICountService countService = (ICountService) SpringUtil.getBean(function);
 	    				return countService.invoke(newJson);
 	    			}
 	    		});

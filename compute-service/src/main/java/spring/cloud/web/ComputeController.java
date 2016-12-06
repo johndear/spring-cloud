@@ -1,4 +1,4 @@
-package spring.cloud.simple;
+package spring.cloud.web;
 
 
 import org.apache.log4j.Logger;

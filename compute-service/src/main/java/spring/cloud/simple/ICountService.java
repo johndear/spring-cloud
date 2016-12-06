@@ -1,4 +1,4 @@
-package spring.cloud.async;
+package spring.cloud.simple;
 
 import com.alibaba.fastjson.JSONObject;
 

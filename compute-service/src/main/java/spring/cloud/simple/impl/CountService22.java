@@ -1,4 +1,4 @@
-package spring.cloud.simple;
+package spring.cloud.simple.impl;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -6,13 +6,13 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import spring.cloud.async.ICountService;
 import spring.cloud.dao.UserMapper;
+import spring.cloud.simple.ICountService;
 
 import com.alibaba.fastjson.JSONObject;
 
-@Service
-public class CountService implements ICountService{
+@Service("count22")
+public class CountService22 implements ICountService{
 	
 	@Autowired
     private UserMapper userMapper;

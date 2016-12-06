@@ -1,4 +1,4 @@
-package spring.cloud.simple;
+package spring.cloud.web;
 
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

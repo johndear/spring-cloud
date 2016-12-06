@@ -1,4 +1,4 @@
-package spring.cloud.future;
+package spring.cloud.async.future.exam2;
 
 import java.util.concurrent.Callable;
 
