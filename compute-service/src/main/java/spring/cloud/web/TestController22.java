@@ -6,6 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+
 import spring.cloud.async.MyAsyncTaskExecutor;
 import spring.cloud.simple.ICountService;
 
@@ -53,6 +56,66 @@ public class TestController22 {
 
 		long end = Calendar.getInstance().getTimeInMillis();
 		System.out.println("take time:" + (end-start));
+	}
+	
+	@RequestMapping("/amount/batch33")
+	public void aa(String json){
+		json= "{"+
+				"callId: '111',"+
+				"callFunctions: [{"+
+					"functionCallId: '',"+
+					"function:\"acount\","+
+					"params: [{"+
+						"name: 'itemId',"+
+						"value: '1001'"+
+					"},{"+
+						"name: 'type',"+
+						"value: '1'"+
+					"},{"+
+						"name: 'datasource',"+
+						"value: '0'"+
+					"},{"+
+						"name: 'method',"+
+						"value: '1'"+
+					"},{"+
+						"name: 'startDate',"+
+						"value: '2015'"+
+					"},{"+
+						"name: 'endDate',"+
+						"value: '2017-12-01'"+
+					"}]"+
+				"},{"+
+					"functionCallId: '',"+
+					"function:\"acount\","+
+					"params: [{"+
+						"name: 'itemId',"+
+						"value: '4001'"+
+					"},{"+
+						"name: 'type',"+
+						"value: '1'"+
+					"},{"+
+						"name: 'datasource',"+
+						"value: '0'"+
+					"},{"+
+						"name: 'method',"+
+						"value: '1'"+
+					"},{"+
+						"name: 'startDate',"+
+						"value: '2015'"+
+					"},{"+
+						"name: 'endDate',"+
+						"value: '2017-12-01'"+
+					"}]"
+				+ "}]"+
+			"}";
+		JSONObject jsonObj = JSONObject.parseObject(json);
+		long start = Calendar.getInstance().getTimeInMillis();
+
+		new MyAsyncTaskExecutor().excute(jsonObj.getString("callFunctions"));
+
+		long end = Calendar.getInstance().getTimeInMillis();
+		System.out.println("take time:" + (end-start));
+		
 	}
 	
 
