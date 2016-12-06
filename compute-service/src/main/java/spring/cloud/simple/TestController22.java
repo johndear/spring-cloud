@@ -14,9 +14,21 @@ public class TestController22 {
 	@Autowired
 	CountService countService;
 	
-	@RequestMapping("/amount/batch22")
+	@RequestMapping("/amount/batch")
 	public void amount(String json){
-		json = "[{itemId:\"1001\",type:\"1\",datasource:\"0\",method:\"1\",startDate:\"2015\",endDate:\"2017-12-01\"},{itemId:\"4001\",type:\"1\",datasource:\"0\",method:\"1\",startDate:\"2015\",endDate:\"2017-12-01\"},{itemId:\"1001\",type:\"1\",datasource:\"0\",method:\"1\",startDate:\"2015\",endDate:\"2017-12-01\"},{itemId:\"1001\",type:\"1\",datasource:\"0\",method:\"1\",startDate:\"2015\",endDate:\"2017-12-01\"}]";
+		json = "[{itemId:\"4001\",type:\"1\",datasource:\"0\",method:\"1\",startDate:\"2015\",endDate:\"2017-12-01\"},{itemId:\"4001\",type:\"1\",datasource:\"0\",method:\"1\",startDate:\"2015\",endDate:\"2017-12-01\"}]";
+
+		long start = Calendar.getInstance().getTimeInMillis();
+
+		new MyAsyncTaskExecutor().excute(json, countService);
+
+		long end = Calendar.getInstance().getTimeInMillis();
+		System.out.println("take time:" + (end-start));
+	}
+	
+	@RequestMapping("/amount/batch22")
+	public void amount22(String json){
+		json = "[{itemCode:\"4001\",type:\"1\",datasource:\"0\",method:\"1\",startDate:\"2015\",endDate:\"2017-12-01\"},{itemCode:\"4001\",type:\"1\",datasource:\"0\",method:\"1\",startDate:\"2015\",endDate:\"2017-12-01\"},{itemCode:\"4001\",type:\"1\",datasource:\"0\",method:\"1\",startDate:\"2015\",endDate:\"2017-12-01\"},{itemCode:\"4001\",type:\"1\",datasource:\"0\",method:\"1\",startDate:\"2015\",endDate:\"2017-12-01\"}]";
 
 		long start = Calendar.getInstance().getTimeInMillis();
 
