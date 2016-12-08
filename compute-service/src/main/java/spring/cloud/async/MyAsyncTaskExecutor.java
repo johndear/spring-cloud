@@ -1,5 +1,7 @@
 package spring.cloud.async;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CompletionService;
 import java.util.concurrent.ExecutionException;
@@ -8,7 +10,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import spring.cloud.simple.ICountService;
-import spring.cloud.simple.impl.CountService;
 import spring.cloud.web.SpringUtil;
 
 import com.alibaba.fastjson.JSON;
@@ -22,7 +23,7 @@ import com.alibaba.fastjson.JSONObject;
  */
 public class MyAsyncTaskExecutor {
 	
-	public void excute(String json){
+	public Object excute(String json){
 		ExecutorService executor = Executors.newFixedThreadPool(20); 
 		CompletionService<Object> completionService = new ExecutorCompletionService<Object>(executor);
 
@@ -33,16 +34,22 @@ public class MyAsyncTaskExecutor {
 	    			
 	    			public Object call() throws Exception {
 //					 	Thread.currentThread().sleep(new Random().nextInt(5000));
+	    				String functionCallId = newJson.getString("functionCallId");
 	    				String function = newJson.getString("function");
 	    				ICountService countService = (ICountService) SpringUtil.getBean(function);
-	    				return countService.invoke(newJson);
+	    				
+	    				Map<String, Object> partMap = new HashMap<String, Object>();
+	    				partMap.put(functionCallId, countService.invoke(newJson));
+	    				
+	    				return partMap;
 	    			}
 	    		});
 	        }
 		 
+		Map<String, Object> resultMap = new HashMap<String, Object>();
 		for (int i = 0; i < newAccountInfo.size(); i++) {
-			 try {
-				System.out.println(JSON.toJSONString(completionService.take().get()));
+			try {
+				resultMap.putAll((Map<? extends String, ? extends Object>) completionService.take().get());
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -51,6 +58,9 @@ public class MyAsyncTaskExecutor {
 				e.printStackTrace();
 			}
 		 }
+		
+		return resultMap;
+		
 	}
 
 }

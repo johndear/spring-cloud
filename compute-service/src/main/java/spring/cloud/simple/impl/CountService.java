@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import spring.cloud.dao.UserMapper;
 import spring.cloud.simple.ICountService;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
 @Service("count")
@@ -18,12 +19,23 @@ public class CountService implements ICountService{
     private UserMapper userMapper;
 	
     public Object invoke(JSONObject newJson){
-    	final String itemId = newJson.getString("itemId");
-        final String type = newJson.getString("type");
-        final String datasource = newJson.getString("datasource");
-        final String startDate = newJson.getString("startDate");
-        final String endDate = newJson.getString("endDate");
-		final String method = newJson.getString("method");
+    	final String params = newJson.getString("params");
+    	JSONArray newAccountInfo = JSONArray.parseArray(params);
+    	
+    	Map<String,String> paramsMap = new HashMap<String, String>();
+    	for (int i = 0; i < newAccountInfo.size(); i++) {
+    		JSONObject jsonObj = (JSONObject) newAccountInfo.get(i);
+    		String name = jsonObj.getString("name");
+    		String value = jsonObj.getString("value");
+    		paramsMap.put(name,value);
+    	}
+    	
+    	final String itemId = paramsMap.get("itemId");
+        final String type = paramsMap.get("type");
+        final String datasource = paramsMap.get("datasource");
+        final String startDate = paramsMap.get("startDate");
+        final String endDate = paramsMap.get("endDate");
+		final String method = paramsMap.get("method");
 		
 		return borrowAmount(itemId, type, datasource, method, startDate, endDate);
 	}
@@ -38,7 +50,7 @@ public class CountService implements ICountService{
 	 * @param endDate
 	 * 统计维度：科目     提取方向     数据来源     汇总方法     核算有效期
 	 */
-	public Map<String, String> borrowAmount(String id, String type, String datasource, String method, String startDate, String endDate){
+	public int borrowAmount(String id, String type, String datasource, String method, String startDate, String endDate){
 		Integer amount = 0;
 		// 单向：借、贷
 		if("1".equals(type) || "2".equals(type)){
@@ -68,10 +80,7 @@ public class CountService implements ICountService{
 
 		}
 		
-		Map<String, String> result = new HashMap<String, String>();
-		result.put(id, amount.toString());
-		
-		return result;
+		return amount;
 		
 	}
 

@@ -9,33 +9,21 @@ import org.springframework.stereotype.Service;
 import spring.cloud.dao.UserMapper;
 import spring.cloud.simple.ICountService;
 
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
-@Service("acount")
-public class ACountService implements ICountService{
+@Service("count11")
+public class CountService11 implements ICountService{
 	
 	@Autowired
     private UserMapper userMapper;
 	
     public Object invoke(JSONObject newJson){
-    	final String params = newJson.getString("params");
-    	JSONArray newAccountInfo = JSONArray.parseArray(params);
-    	
-    	Map<String,String> paramsMap = new HashMap<String, String>();
-    	for (int i = 0; i < newAccountInfo.size(); i++) {
-    		JSONObject jsonObj = (JSONObject) newAccountInfo.get(i);
-    		String name = jsonObj.getString("name");
-    		String value = jsonObj.getString("value");
-    		paramsMap.put(name,value);
-    	}
-    	
-    	final String itemId = paramsMap.get("itemId");
-        final String type = paramsMap.get("type");
-        final String datasource = paramsMap.get("datasource");
-        final String startDate = paramsMap.get("startDate");
-        final String endDate = paramsMap.get("endDate");
-		final String method = paramsMap.get("method");
+    	final String itemId = newJson.getString("itemId");
+        final String type = newJson.getString("type");
+        final String datasource = newJson.getString("datasource");
+        final String startDate = newJson.getString("startDate");
+        final String endDate = newJson.getString("endDate");
+		final String method = newJson.getString("method");
 		
 		return borrowAmount(itemId, type, datasource, method, startDate, endDate);
 	}
