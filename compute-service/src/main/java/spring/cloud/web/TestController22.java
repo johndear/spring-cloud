@@ -55,47 +55,65 @@ public class TestController22 {
 				"callbackUrl: 'http://localhost:2223/callback',"+
 				"callFunctions: [{"+
 					"functionCallId: 'f1',"+
-					"function:\"count\","+
+					"function:\"fun_extract_amount\","+
 					"params: [{"+
 						"name: 'itemId',"+
 						"value: '1001'"+
 					"},{"+
-						"name: 'type',"+
+						"name: 'companyId',"+
+						"value: '13'"+
+					"},{"+
+						"name: 'extractType',"+
 						"value: '1'"+
 					"},{"+
-						"name: 'datasource',"+
+						"name: 'dataSource',"+
 						"value: '0'"+
 					"},{"+
-						"name: 'method',"+
+						"name: 'collectType',"+
 						"value: '1'"+
 					"},{"+
 						"name: 'startDate',"+
-						"value: '2015'"+
+						"value: '2015-01-01'"+
+					"},{"+
+						"name: 'startDateOffset',"+
+						"value: '5'"+
 					"},{"+
 						"name: 'endDate',"+
 						"value: '2017-12-01'"+
+					"},{"+
+						"name: 'endDateOffset',"+
+						"value: '-1'"+
 					"}]"+
 				"},{"+
 					"functionCallId: 'f2',"+
-					"function:\"count\","+
+					"function:\"fun_extract_amount\","+
 					"params: [{"+
 						"name: 'itemId',"+
 						"value: '4001'"+
 					"},{"+
-						"name: 'type',"+
+						"name: 'companyId',"+
+						"value: '13'"+
+					"},{"+
+						"name: 'extractType',"+
 						"value: '1'"+
 					"},{"+
-						"name: 'datasource',"+
+						"name: 'dataSource',"+
 						"value: '0'"+
 					"},{"+
-						"name: 'method',"+
+						"name: 'collectType',"+
 						"value: '1'"+
 					"},{"+
 						"name: 'startDate',"+
-						"value: '2015'"+
+						"value: '2015-01-01'"+
+					"},{"+
+						"name: 'startDateOffset',"+
+						"value: '5'"+
 					"},{"+
 						"name: 'endDate',"+
 						"value: '2017-12-01'"+
+					"},{"+
+						"name: 'endDateOffset',"+
+						"value: '1'"+
 					"}]"
 				+ "}]"+
 			"}";
