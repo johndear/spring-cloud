@@ -1,23 +1,10 @@
 package spring.cloud.web;
 
-import java.net.URLEncoder;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.NameValuePair;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.message.BasicNameValuePair;
-import org.apache.http.protocol.HTTP;
-import org.apache.http.util.EntityUtils;
 import org.apache.log4j.Logger;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -128,7 +115,7 @@ public class TestController22 {
 		resultMap.put(jsonObj.getString("callId"), (Map<String, Object>) new MyAsyncTaskExecutor().excute(jsonObj.getString("callFunctions")));
 
 		long end = Calendar.getInstance().getTimeInMillis();
-		System.out.println("compute result:" + JSON.toJSONString(resultMap) + ", take timeInMillis:" + (end-start));
+		logger.info("compute result:" + JSON.toJSONString(resultMap) + ", take timeInMillis:" + (end-start));
 		
 		// 每隔5分钟回调1次，共重试3次
 		Map<String,Object> params = new HashMap<String, Object>();
@@ -138,7 +125,7 @@ public class TestController22 {
 		while(i-->0){
 			html = HttpUtil.post(jsonObj.getString("callbackUrl"), params);;
 			if(StringUtils.isNotEmpty(html)){
-				System.out.println("callback result:" + html);
+				logger.info("callback result:" + html);
 				break;
 			}
 			
@@ -149,7 +136,7 @@ public class TestController22 {
 		}
 		
 		String callbackResult = "参数" + json + ", 回调结果：" + 123;
-		System.out.println(callbackResult);
+		logger.debug(callbackResult);
 		return callbackResult;
 	}
 	
@@ -193,6 +180,8 @@ public class TestController22 {
 
 class MyThread extends Thread{
 	
+	Logger logger = Logger.getLogger(MyThread.class);
+	
 	JSONObject jsonObj;
 	
 	public MyThread(JSONObject jsonObj){
@@ -208,7 +197,7 @@ class MyThread extends Thread{
 			resultMap.put(jsonObj.getString("callId"), (Map<String, Object>) new MyAsyncTaskExecutor().excute(jsonObj.getString("callFunctions")));
 
 			long end = Calendar.getInstance().getTimeInMillis();
-			System.out.println("compute result:" + JSON.toJSONString(resultMap) + ", take timeInMillis:" + (end-start));
+			logger.info("compute result:" + JSON.toJSONString(resultMap) + ", take timeInMillis:" + (end-start));
 			
 			// 每隔5分钟回调1次，共重试3次
 			int i = 3;
@@ -218,7 +207,7 @@ class MyThread extends Thread{
 			while(i-->0){
 				html = HttpUtil.post(jsonObj.getString("callbackUrl"), params);;
 				if(StringUtils.isNotEmpty(html)){
-					System.out.println("callback result:" + html);
+					logger.info("callback result:" + html);
 					break;
 				}
 				
@@ -229,7 +218,7 @@ class MyThread extends Thread{
 			}
 			
 			String callbackResult = "参数" + jsonObj.toJSONString() + ", 回调结果：" + html;
-			System.out.println(callbackResult);
+			logger.info(callbackResult);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
