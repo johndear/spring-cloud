@@ -22,9 +22,10 @@ import com.alibaba.fastjson.JSONObject;
  *
  */
 public class MyAsyncTaskExecutor {
+
+	ExecutorService executor = Executors.newFixedThreadPool(20); 
 	
 	public Object excute(String json){
-		ExecutorService executor = Executors.newFixedThreadPool(20); 
 		CompletionService<Object> completionService = new ExecutorCompletionService<Object>(executor);
 
 		JSONArray newAccountInfo = JSONArray.parseArray(json);
