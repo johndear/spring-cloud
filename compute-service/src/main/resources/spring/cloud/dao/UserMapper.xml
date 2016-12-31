@@ -4,7 +4,7 @@
  
   <select id="sumCurrentSubject" resultType="java.lang.Integer">
 		SELECT 
-		  SUM(amount) 
+		  IFNULL(SUM(amount),0)
 		FROM
 		  journalizing_info 
 		WHERE item_id = #{id}
@@ -17,7 +17,7 @@
   
   <select id="sumContainChildrenSubject" resultType="java.lang.Integer">
 		SELECT 
-		  SUM(amount) 
+		  IFNULL(SUM(amount),0) 
 		FROM
 		  journalizing_info 
 		WHERE item_code LIKE (SELECT item_code FROM journalizing_info WHERE item_id=#{id} LIMIT 1)||'%' 
