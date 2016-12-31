@@ -46,9 +46,9 @@ public class HttpUtil {
 //			httpGet.getParams().setParameter("data", );
 			HttpPost httpPost = new HttpPost(url);
 			RequestConfig requestConfig = RequestConfig.custom()  
-			        .setConnectTimeout(5000) // 设置连接超时时间，单位毫秒。
-			        .setConnectionRequestTimeout(1000)  // 设置从connect Manager获取Connection 超时时间，单位毫秒。这个属性是新加的属性，因为目前版本是可以共享连接池的。
-			        .setSocketTimeout(5000).build(); //请求获取数据的超时时间，单位毫秒。 如果访问一个接口，多少时间内无法返回数据，就直接放弃此次调用。
+			        .setConnectTimeout(5000) 
+			        .setConnectionRequestTimeout(1000)
+			        .setSocketTimeout(5000).build(); 
 			httpPost.setConfig(requestConfig);
 			httpPost.setEntity(new UrlEncodedFormEntity(nvps, HTTP.UTF_8));   
 			HttpResponse response = httpClient.execute(httpPost);
