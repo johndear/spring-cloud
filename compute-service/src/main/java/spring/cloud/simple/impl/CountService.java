@@ -8,7 +8,7 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import spring.cloud.dao.UserMapper;
+import spring.cloud.mapper.test1.User1Mapper;
 import spring.cloud.simple.ICountService;
 import spring.cloud.utils.DateUtil;
 
@@ -19,7 +19,7 @@ import com.alibaba.fastjson.JSONObject;
 public class CountService implements ICountService{
 	
 	@Autowired
-    private UserMapper userMapper;
+    private User1Mapper userMapper;
 	
     public Object invoke(JSONObject newJson){
     	final String params = newJson.getString("params");

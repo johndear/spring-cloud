@@ -7,7 +7,7 @@ import org.springframework.boot.context.web.SpringBootServletInitializer;
 
 //@EnableDiscoveryClient
 @SpringBootApplication
-@MapperScan("spring.cloud.dao")
+//@MapperScan("spring.cloud.dao")
 public class LocalApplication {
 	public static void main(String[] args) {
 		new SpringApplicationBuilder(LocalApplication.class).web(true).run(args);

@@ -1,11 +1,12 @@
-package spring.cloud.dao;
+package spring.cloud.mapper.test1;
 
-import org.apache.ibatis.annotations.Mapper;
+import java.util.List;
+import java.util.Map;
+
 import org.apache.ibatis.annotations.Param;
 
-@Mapper
-public interface UserMapper {
-
+public interface User1Mapper {
+	
 	/**
 	 * 汇总科目金额
 	 * @return
@@ -18,4 +19,6 @@ public interface UserMapper {
 	 */
 	public Integer sumContainChildrenSubject(@Param("id") String id, @Param("companyId") String companyId, @Param("type") String type, @Param("datasource") String datasource,@Param("startDate") String startDate,@Param("endDate") String endDate);
 	
+	public void insertApiHistoryRecord(@Param("ip") String ip);
+
 }
