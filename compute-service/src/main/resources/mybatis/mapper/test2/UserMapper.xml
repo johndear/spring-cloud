@@ -8,6 +8,14 @@
 	   FROM api_function
 	   WHERE id = #{id}
     </select>
+    
+    <insert id="insert" parameterType="java.util.HashMap" >
+       INSERT INTO 
+       		api_function
+       		(id,name,description) 
+       	VALUES
+       		(#{id}, #{name}, #{description})
+    </insert>
 
     
 

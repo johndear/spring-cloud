@@ -5,4 +5,6 @@ import java.util.Map;
 public interface User2Mapper {
 	
 	Map<String,Object> getOne(Long id);
+	
+	void insert(Map<String,Object> params);
 }
