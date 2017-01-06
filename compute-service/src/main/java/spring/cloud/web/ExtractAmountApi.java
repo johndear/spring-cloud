@@ -98,10 +98,10 @@ class MyThread extends Thread{
 			// 每隔5分钟回调1次，共重试3次
 			int i = 3;
 			String html = "调用回调接口失败！";
-			Map<String,Object> params = new HashMap<String, Object>();
-			params.put("data", JSON.toJSONString(resultMap));
+//			Map<String,Object> params = new HashMap<String, Object>();
+//			params.put("data", JSON.toJSONString(resultMap));
 			while(i-->0){
-				html = HttpUtil.post(jsonObj.getString("callbackUrl"), params);;
+				html = HttpUtil.post(jsonObj.getString("callbackUrl"), JSON.toJSONString(resultMap));
 				if(StringUtils.isNotEmpty(html)){
 					logger.info("callback result:" + html);
 					break;
