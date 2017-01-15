@@ -13,6 +13,7 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.protocol.HTTP;
@@ -51,6 +52,38 @@ public class HttpUtil {
 			        .setSocketTimeout(5000).build(); 
 			httpPost.setConfig(requestConfig);
 			httpPost.setEntity(new UrlEncodedFormEntity(nvps, HTTP.UTF_8));   
+			HttpResponse response = httpClient.execute(httpPost);
+			
+			StatusLine statusLine = response.getStatusLine();
+			int statusCode = statusLine.getStatusCode();
+			if(statusCode == 200){
+				HttpEntity httpEntity = response.getEntity();
+				if(httpEntity!=null){
+					return EntityUtils.toString(httpEntity);
+				}
+			}else{
+				System.out.println("调用" + url + "接口, 参数：" + JSON.toJSONString(params) + "，返回状态码：" + statusCode);
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return "";
+	}
+	
+	public static String post(String url, String params){
+		try {
+			HttpClient httpClient = HttpClients.createDefault();
+			
+//			HttpGet httpGet = new HttpGet(jsonObj.getString("callbackUrl") + "?data=" + URLEncoder.encode(JSON.toJSONString(resultMap),"UTF-8"));
+//			httpGet.getParams().setParameter("data", );
+			HttpPost httpPost = new HttpPost(url);
+			RequestConfig requestConfig = RequestConfig.custom()  
+			        .setConnectTimeout(5000) 
+			        .setConnectionRequestTimeout(1000)
+			        .setSocketTimeout(5000).build(); 
+			httpPost.setConfig(requestConfig);
+			httpPost.setEntity(new StringEntity(params));   
 			HttpResponse response = httpClient.execute(httpPost);
 			
 			StatusLine statusLine = response.getStatusLine();
