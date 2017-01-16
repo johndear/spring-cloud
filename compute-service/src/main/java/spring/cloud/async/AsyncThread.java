@@ -85,8 +85,7 @@ public class AsyncThread extends Thread{
 				insertParams.put("responseResult", apiResult);
 				apiInvokeRecordMapper.insert(insertParams);
 			} else{
-				// TODO job跑的时候忽略，不需要记录日志，只需要更新调用状态
-				// 记录调用日志
+				// 更新调用日志
 				Map<String,Object> updatearams = new HashMap<String, Object>();
 				updatearams.put("callId", jsonObj.getString("callId"));
 				updatearams.put("responseTime", Calendar.getInstance().getTime());

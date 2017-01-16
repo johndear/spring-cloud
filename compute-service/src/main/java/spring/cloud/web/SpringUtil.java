@@ -34,7 +34,8 @@ public class SpringUtil implements ApplicationContextAware {
 
 		}
 		
-		syncCallbackResultJob.get();
+		// 启动定时job
+		syncCallbackResultJob.excute();
 
 	}
 

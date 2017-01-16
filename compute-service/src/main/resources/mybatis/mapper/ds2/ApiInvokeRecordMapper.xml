@@ -15,7 +15,8 @@
 			response_timelong, 
 			callback_url,
 			callback_success,
-			callback_result
+			callback_result,
+			callback_times
 			)
 			VALUES
 			(
@@ -29,7 +30,8 @@
 			#{responseTimelong}, 
 			#{callbackUrl},
 			#{callbackSuccess},
-			#{callbackResult}
+			#{callbackResult},
+			0
 			)
     </insert>
     
@@ -40,20 +42,20 @@
     </select>
     
     <update id="update" parameterType="java.util.HashMap">
-   	 	<![CDATA[
     	update api_invoke_record 
     	set 
-    		<if test="responseTime">
+    		<if test="responseTime!=null">
 	    		response_time = #{responseTime},
 		    	response_timelong = #{responseTimelong},
 		    	response_result = #{responseResult},
 	    	</if>
-	    	<if test="callbackSuccess">
+	    	<if test="callbackSuccess!=null">
 		    	callback_success = #{callbackSuccess},
 		    	callback_result = #{callbackResult},
 	    	</if>
 		    callback_times = callback_times + 1
 	    where call_id= #{callId}
+	    <![CDATA[
 	    	and callback_times<10
 	   ]]>
     </update>
