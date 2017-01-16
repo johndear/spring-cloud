@@ -8,6 +8,8 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import spring.cloud.dto.AmountExtractDirectionEnum;
+import spring.cloud.dto.CollectTypeEnum;
 import spring.cloud.mapper.ds1.JournalizingInfoMapper;
 import spring.cloud.service.ICountService;
 import spring.cloud.utils.DateUtil;
@@ -61,38 +63,48 @@ public class ExtractAmountService implements ICountService{
     /**
 	 * 
 	 * @param id
-	 * @param type 0：借 1：贷 2：借减贷 3：贷减借
+	 * @param extractType-提取方向： 0：借 1：贷 2：借减贷 3：贷减借
 	 * @param datasource 0:普通核算分录 1：政策生成分录 2：全分录
-	 * @param method 0:汇总科目及其子科目金额  1:汇总科目金额 
+	 * @param collectType-汇总方法： 0:汇总科目及其子科目金额  1:汇总科目金额 
 	 * @param startDate
 	 * @param endDate
-	 * 统计维度：科目     提取方向     数据来源     汇总方法     核算有效期
+	 * 统计维度：科目     提取方向     数据来源   汇总方法     核算有效期
+     * @throws Exception 
 	 */
-	public int borrowAmount(String id, String companyId, String type, String datasource, String method, String startDate, String endDate){
+	public int borrowAmount(String id, String companyId, String extractTypeStr, String datasource, String collectTypeStr, String startDate, String endDate) throws Exception{
+		AmountExtractDirectionEnum amountExtractDirection = AmountExtractDirectionEnum.getEnum(extractTypeStr);
+		if(amountExtractDirection == null){
+			throw new Exception("目前只支持【借、贷 、借减贷、贷减借】提取方向");
+		}
+		CollectTypeEnum collectType = CollectTypeEnum.getEnum(collectTypeStr);
+		if(collectType == null){
+			throw new Exception("目前只支持【汇总科目金额、汇总科目及其子科目金额】汇总方法 ");
+		}
+		
 		Integer amount = 0;
 		// 单向：借、贷
-		if("0".equals(type) || "1".equals(type)){
-			if("1".equals(method)){
-				amount = userMapper.sumCurrentSubject(id, companyId, type, datasource, startDate, endDate);
+		if(AmountExtractDirectionEnum.DEBIT == amountExtractDirection || AmountExtractDirectionEnum.CREDIT == amountExtractDirection){
+			if(CollectTypeEnum.TYPE0 == collectType){
+				amount = userMapper.sumCurrentSubject(id, companyId, amountExtractDirection.getValue(), datasource, startDate, endDate);
 			}else{
-				amount = userMapper.sumContainChildrenSubject(id, companyId, type, datasource, startDate, endDate);
+				amount = userMapper.sumContainChildrenSubject(id, companyId, amountExtractDirection.getValue(), datasource, startDate, endDate);
 			}
 			
 		// 双向：借减贷、贷减借
 		}else{
 			// 借减贷
 			int a,b;
-			if("0".equals(method)){
-				a = userMapper.sumContainChildrenSubject(id, companyId, "0", datasource, startDate, endDate);
-				b = userMapper.sumContainChildrenSubject(id, companyId, "1", datasource, startDate, endDate);
+			if(CollectTypeEnum.TYPE0 == collectType){
+				a = userMapper.sumCurrentSubject(id, companyId, AmountExtractDirectionEnum.DEBIT.getValue(), datasource, startDate, endDate);
+				b = userMapper.sumCurrentSubject(id, companyId, AmountExtractDirectionEnum.CREDIT.getValue(), datasource, startDate, endDate);
 			}else{
-				a = userMapper.sumCurrentSubject(id, companyId, "0", datasource, startDate, endDate);
-				b = userMapper.sumCurrentSubject(id, companyId, "1", datasource, startDate, endDate);
+				a = userMapper.sumContainChildrenSubject(id, companyId, AmountExtractDirectionEnum.DEBIT.getValue(), datasource, startDate, endDate);
+				b = userMapper.sumContainChildrenSubject(id, companyId, AmountExtractDirectionEnum.CREDIT.getValue(), datasource, startDate, endDate);
 			}
-			
 			amount = a - b;
+			
 			// 贷减借
-			if("3".equals(type)){
+			if(AmountExtractDirectionEnum.CREDIT_MINUS_DEBIT == amountExtractDirection){
 				amount = amount * -1;
 			}
 
