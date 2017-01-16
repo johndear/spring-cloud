@@ -1,11 +1,11 @@
-package spring.cloud.mapper.test1;
+package spring.cloud.mapper.ds1;
 
 import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
 
-public interface User1Mapper {
+public interface JournalizingInfoMapper {
 	
 	/**
 	 * 汇总科目金额

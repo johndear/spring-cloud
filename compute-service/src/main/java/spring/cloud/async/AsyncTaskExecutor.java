@@ -9,7 +9,7 @@ import java.util.concurrent.ExecutorCompletionService;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import spring.cloud.simple.ICountService;
+import spring.cloud.service.ICountService;
 import spring.cloud.web.SpringUtil;
 
 import com.alibaba.fastjson.JSON;
@@ -21,11 +21,11 @@ import com.alibaba.fastjson.JSONObject;
  * @author Administrator
  *
  */
-public class MyAsyncTaskExecutor {
+public class AsyncTaskExecutor {
 
 	static ExecutorService executor = Executors.newFixedThreadPool(20); 
 	
-	public Object excute(String json){
+	public static Object excute(String json) throws Exception {
 		CompletionService<Object> completionService = new ExecutorCompletionService<Object>(executor);
 
 		JSONArray newAccountInfo = JSONArray.parseArray(json);
@@ -49,15 +49,7 @@ public class MyAsyncTaskExecutor {
 		 
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		for (int i = 0; i < newAccountInfo.size(); i++) {
-			try {
-				resultMap.putAll((Map<? extends String, ? extends Object>) completionService.take().get());
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (ExecutionException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			resultMap.putAll((Map<? extends String, ? extends Object>) completionService.take().get());
 		 }
 		
 		return resultMap;

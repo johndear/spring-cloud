@@ -1,4 +1,4 @@
-package spring.cloud.simple.impl;
+package spring.cloud.service.impl;
 
 import java.text.ParseException;
 import java.util.HashMap;
@@ -8,20 +8,20 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import spring.cloud.mapper.test1.User1Mapper;
-import spring.cloud.simple.ICountService;
+import spring.cloud.mapper.ds1.JournalizingInfoMapper;
+import spring.cloud.service.ICountService;
 import spring.cloud.utils.DateUtil;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
 @Service("fun_extract_amount")
-public class CountService implements ICountService{
+public class ExtractAmountService implements ICountService{
 	
 	@Autowired
-    private User1Mapper userMapper;
+    private JournalizingInfoMapper userMapper;
 	
-    public Object invoke(JSONObject newJson){
+    public Object invoke(JSONObject newJson) throws Exception{
     	final String params = newJson.getString("params");
     	JSONArray newAccountInfo = JSONArray.parseArray(params);
     	

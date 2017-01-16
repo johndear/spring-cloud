@@ -1,12 +1,27 @@
 package spring.cloud.web;
 
+import java.io.File;
+import java.io.IOException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
+
+import spring.cloud.jobs.SyncCallbackResultJob;
 
 @Component
 public class SpringUtil implements ApplicationContextAware {
+	
+	@Autowired
+	SyncCallbackResultJob syncCallbackResultJob;
 
 	private static ApplicationContext applicationContext = null;
 
@@ -18,22 +33,8 @@ public class SpringUtil implements ApplicationContextAware {
 			SpringUtil.applicationContext = applicationContext;
 
 		}
-
-		System.out
-				.println("---------------------------------------------------------------------");
-
-		System.out
-				.println("---------------------------------------------------------------------");
-
-		System.out
-				.println("---------------com.kfit.base.util.SpringUtil------------------------------------------------------");
-
-		System.out
-				.println("========ApplicationContext配置成功,在普通类可以通过调用SpringUtils.getAppContext()获取applicationContext对象,applicationContext="
-						+ SpringUtil.applicationContext + "========");
-
-		System.out
-				.println("---------------------------------------------------------------------");
+		
+		syncCallbackResultJob.get();
 
 	}
 
@@ -56,6 +57,17 @@ public class SpringUtil implements ApplicationContextAware {
 	// 通过name,以及Clazz返回指定的Bean
 	public static <T> T getBean(String name, Class<T> clazz) {
 		return getApplicationContext().getBean(name, clazz);
+	}
+
+	public static List<String> getServiceAliases() {
+		List<String> aliases = new ArrayList<String>();
+		Map<String, Object> beansWithAnnotationMap = SpringUtil.getApplicationContext().getBeansWithAnnotation(org.springframework.stereotype.Service.class);  
+		for(Map.Entry<String, Object> entry : beansWithAnnotationMap.entrySet()){  
+			Class<? extends Object> clazz = entry.getValue().getClass();//获取到实例对象的class信息
+			Service anno = clazz.getAnnotation(Service.class);
+			aliases.add(anno.value());
+		}
+		return aliases;
 	}
 
 }

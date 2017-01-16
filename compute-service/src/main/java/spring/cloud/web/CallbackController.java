@@ -1,5 +1,7 @@
 package spring.cloud.web;
 
+import java.util.Random;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
@@ -17,14 +19,12 @@ public class CallbackController {
 	
 	@RequestMapping(method=RequestMethod.POST, path="/callback")
 	public String test(String data) throws Exception{
-//		ServiceInstance instance = client.getLocalServiceInstance();
-//		Thread.sleep(6000);
-		i ++;
-		if(i>5){
-			System.out.println("data====>" + data);
-			return data;
+		System.out.println("data====>" + data);
+		int result = new Random().nextInt(10);
+		if(result > 5){
+			return "{code:2000}";
 		}else{
-			throw new Exception();
+			return data;
 		}
 	}
 

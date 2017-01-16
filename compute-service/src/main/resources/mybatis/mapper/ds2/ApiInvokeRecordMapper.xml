@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="spring.cloud.mapper.ds2.ApiInvokeRecordMapper" >
+
+    <insert id="insert" parameterType="java.util.HashMap" >
+		INSERT INTO haorui_service.api_invoke_record 
+			(
+			ip, 
+			call_id,
+			request_time, 
+			request_url, 
+			request_params,
+			response_result, 
+			response_time, 
+			response_timelong, 
+			callback_url,
+			callback_success,
+			callback_result
+			)
+			VALUES
+			(
+			#{ip}, 
+			#{callId},
+			#{requestTime}, 
+			#{requestUrl}, 
+			#{requestParams},
+			#{responseResult}, 
+			#{responseTime}, 
+			#{responseTimelong}, 
+			#{callbackUrl},
+			#{callbackSuccess},
+			#{callbackResult}
+			)
+    </insert>
+    
+    <select id="queryApiInvokeRecord" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+    	<![CDATA[
+    	SELECT * FROM api_invoke_record where callback_success = 0 and (callback_times IS NULL OR callback_times<10) order by request_time desc limit 20
+    	]]>
+    </select>
+    
+    <update id="update" parameterType="java.util.HashMap">
+   	 	<![CDATA[
+    	update api_invoke_record 
+    	set 
+    		<if test="responseTime">
+	    		response_time = #{responseTime},
+		    	response_timelong = #{responseTimelong},
+		    	response_result = #{responseResult},
+	    	</if>
+	    	<if test="callbackSuccess">
+		    	callback_success = #{callbackSuccess},
+		    	callback_result = #{callbackResult},
+	    	</if>
+		    callback_times = callback_times + 1
+	    where call_id= #{callId}
+	    	and callback_times<10
+	   ]]>
+    </update>
+    
+
+</mapper>
