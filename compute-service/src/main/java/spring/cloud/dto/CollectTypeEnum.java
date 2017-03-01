@@ -5,7 +5,7 @@ public enum CollectTypeEnum {
         //实现抽象方法  
         public String getDescription()  
         {  
-            return "汇总科目金额";
+        	return "总科目金额及其子科目金额";
         }  
         public Short getValue()  
         {  
@@ -16,11 +16,11 @@ public enum CollectTypeEnum {
         //实现抽象方法  
         public String getDescription()  
         {  
-            return "总科目金额及其子科目金额";
+        	return "汇总科目金额";
         }  
         public Short getValue()  
         {  
-            return 1;  
+        	return 1;  
         } 
     };
     public abstract String getDescription();  

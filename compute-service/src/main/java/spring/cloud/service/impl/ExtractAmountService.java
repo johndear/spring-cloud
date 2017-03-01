@@ -85,9 +85,9 @@ public class ExtractAmountService implements ICountService{
 		// 单向：借、贷
 		if(AmountExtractDirectionEnum.DEBIT == amountExtractDirection || AmountExtractDirectionEnum.CREDIT == amountExtractDirection){
 			if(CollectTypeEnum.TYPE0 == collectType){
-				amount = userMapper.sumCurrentSubject(id, companyId, amountExtractDirection.getValue(), datasource, startDate, endDate);
-			}else{
 				amount = userMapper.sumContainChildrenSubject(id, companyId, amountExtractDirection.getValue(), datasource, startDate, endDate);
+			}else{
+				amount = userMapper.sumCurrentSubject(id, companyId, amountExtractDirection.getValue(), datasource, startDate, endDate);
 			}
 			
 		// 双向：借减贷、贷减借
@@ -95,11 +95,11 @@ public class ExtractAmountService implements ICountService{
 			// 借减贷
 			int a,b;
 			if(CollectTypeEnum.TYPE0 == collectType){
-				a = userMapper.sumCurrentSubject(id, companyId, AmountExtractDirectionEnum.DEBIT.getValue(), datasource, startDate, endDate);
-				b = userMapper.sumCurrentSubject(id, companyId, AmountExtractDirectionEnum.CREDIT.getValue(), datasource, startDate, endDate);
-			}else{
 				a = userMapper.sumContainChildrenSubject(id, companyId, AmountExtractDirectionEnum.DEBIT.getValue(), datasource, startDate, endDate);
 				b = userMapper.sumContainChildrenSubject(id, companyId, AmountExtractDirectionEnum.CREDIT.getValue(), datasource, startDate, endDate);
+			}else{
+				a = userMapper.sumCurrentSubject(id, companyId, AmountExtractDirectionEnum.DEBIT.getValue(), datasource, startDate, endDate);
+				b = userMapper.sumCurrentSubject(id, companyId, AmountExtractDirectionEnum.CREDIT.getValue(), datasource, startDate, endDate);
 			}
 			amount = a - b;
 			
