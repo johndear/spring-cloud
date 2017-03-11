@@ -3,7 +3,7 @@
 <mapper namespace="spring.cloud.mapper.ds2.ApiInvokeRecordMapper" >
 
     <insert id="insert" parameterType="java.util.HashMap" >
-		INSERT INTO haorui_service.api_invoke_record 
+		INSERT INTO api_invoke_record 
 			(
 			ip, 
 			call_id,
