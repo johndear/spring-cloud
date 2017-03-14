@@ -54,6 +54,10 @@ public class ExtractAmountApi {
 			}
 			
 			JSONArray callFunctions = JSONArray.parseArray(jsonObj.getString("callFunctions"));
+			if(callFunctions == null || callFunctions.size()==0){
+				return "callFunctions不允许为空！";
+			}
+			
 			for (int i = 0; i < callFunctions.size(); i++) {
 	            final JSONObject newJson = (JSONObject) callFunctions.get(i);
 				if(StringUtils.isEmpty(newJson.getString("functionCallId"))){
@@ -61,7 +65,7 @@ public class ExtractAmountApi {
 				}
 	
 				if(StringUtils.isEmpty(newJson.getString("function"))){
-					return "fun_extract_amount不允许为空！";
+					return "function不允许为空！";
 				}
 				
 				List<String> alisa = SpringUtil.getServiceAliases();
