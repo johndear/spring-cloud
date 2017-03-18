@@ -20,8 +20,6 @@ import spring.cloud.jobs.SyncCallbackResultJob;
 @Component
 public class SpringUtil implements ApplicationContextAware {
 	
-	@Autowired
-	SyncCallbackResultJob syncCallbackResultJob;
 
 	private static ApplicationContext applicationContext = null;
 
@@ -34,8 +32,7 @@ public class SpringUtil implements ApplicationContextAware {
 
 		}
 		
-		// 启动定时job
-		syncCallbackResultJob.excute();
+		
 
 	}
 
