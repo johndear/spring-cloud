@@ -1,13 +1,11 @@
 package spring.cloud;
 
-import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
-import org.springframework.boot.context.web.SpringBootServletInitializer;
+import org.springframework.boot.web.servlet.ServletComponentScan;
 
-//@EnableDiscoveryClient
 @SpringBootApplication
-//@MapperScan("spring.cloud.dao")
+@ServletComponentScan
 public class LocalApplication {
 	public static void main(String[] args) {
 		new SpringApplicationBuilder(LocalApplication.class).web(true).run(args);
