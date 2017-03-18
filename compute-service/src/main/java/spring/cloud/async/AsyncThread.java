@@ -32,6 +32,7 @@ public class AsyncThread extends Thread{
 		this.isJob = isJob;
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	public void run() {
 		boolean apiSuccess = false;
@@ -48,13 +49,13 @@ public class AsyncThread extends Thread{
 			long end = Calendar.getInstance().getTimeInMillis();
 			logger.info("计算结果为:" + apiResult + ", 计算时长为:" + (end - start) + "毫秒.");
 			
-			// 每隔2秒重试1次，共3次
+			// 调用回调接口
 			int count = 0;
 			do {
+				// 每隔2秒重试1次，共3次
 				count++;
-				// 调用回调接口
 				callbackResult = HttpUtil.post(jsonObj.getString("callbackUrl"), JSON.toJSONString(resultMap));
-				System.out.println("callback" + count + " result:" + callbackResult);
+				logger.info("callback" + count + " result:" + callbackResult);
 				if(StringUtils.isNotEmpty(callbackResult) && "2000".equals(JSONObject.parseObject(callbackResult).getString("code"))){
 					apiSuccess = true;
 					break;

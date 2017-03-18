@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CompletionService;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorCompletionService;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -12,7 +11,6 @@ import java.util.concurrent.Executors;
 import spring.cloud.service.ICountService;
 import spring.cloud.web.SpringUtil;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
@@ -25,34 +23,35 @@ public class AsyncTaskExecutor {
 
 	static ExecutorService executor = Executors.newFixedThreadPool(20); 
 	
+	@SuppressWarnings("unchecked")
 	public static Object excute(String json) throws Exception {
 		CompletionService<Object> completionService = new ExecutorCompletionService<Object>(executor);
 
-		JSONArray newAccountInfo = JSONArray.parseArray(json);
-		for (int i = 0; i < newAccountInfo.size(); i++) {
-	            final JSONObject newJson = (JSONObject) newAccountInfo.get(i);
-	    		completionService.submit(new Callable<Object>() {
-	    			
-	    			public Object call() throws Exception {
+		JSONArray callFunctions = JSONArray.parseArray(json);
+		for (int i = 0; i < callFunctions.size(); i++) {
+            final JSONObject callFunction = (JSONObject) callFunctions.get(i);
+    		completionService.submit(new Callable<Object>() {
+    			
+    			public Object call() throws Exception {
 //					 	Thread.currentThread().sleep(new Random().nextInt(5000));
-	    				String functionCallId = newJson.getString("functionCallId");
-	    				String function = newJson.getString("function");
-	    				ICountService countService = (ICountService) SpringUtil.getBean(function);
-	    				
-	    				Map<String, Object> partMap = new HashMap<String, Object>();
-	    				partMap.put(functionCallId, countService.invoke(newJson));
-	    				
-	    				return partMap;
-	    			}
-	    		});
-	        }
+    				String functionCallId = callFunction.getString("functionCallId");
+    				String function = callFunction.getString("function");
+    				ICountService countService = (ICountService) SpringUtil.getBean(function);
+    				
+    				Map<String, Object> partResultMap = new HashMap<String, Object>();
+    				partResultMap.put(functionCallId, countService.invoke(callFunction));
+    				return partResultMap;
+    			}
+    		});
+	    }
 		 
-		Map<String, Object> resultMap = new HashMap<String, Object>();
-		for (int i = 0; i < newAccountInfo.size(); i++) {
-			resultMap.putAll((Map<? extends String, ? extends Object>) completionService.take().get());
-		 }
+		// 汇总计算结果
+		Map<String, Object> allResultMap = new HashMap<String, Object>();
+		for (int i = 0; i < callFunctions.size(); i++) {
+			allResultMap.putAll((Map<? extends String, ? extends Object>) completionService.take().get());
+		}
 		
-		return resultMap;
+		return allResultMap;
 		
 	}
 
