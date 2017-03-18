@@ -86,14 +86,14 @@ public class AsyncThread extends Thread{
 				apiInvokeRecordMapper.insert(insertParams);
 			} else{
 				// 更新调用日志
-				Map<String,Object> updatearams = new HashMap<String, Object>();
-				updatearams.put("callId", jsonObj.getString("callId"));
-				updatearams.put("responseTime", Calendar.getInstance().getTime());
-				updatearams.put("responseTimelong", Double.valueOf((Calendar.getInstance().getTimeInMillis() - start)/1000 +"."+ (Calendar.getInstance().getTimeInMillis() - start)%1000));
-				updatearams.put("callbackSuccess", apiSuccess);
-				updatearams.put("callbackResult", callbackResult);
-				updatearams.put("responseResult", apiResult);
-				apiInvokeRecordMapper.update(updatearams);
+				Map<String,Object> updateParams = new HashMap<String, Object>();
+				updateParams.put("callId", jsonObj.getString("callId"));
+				updateParams.put("responseTime", Calendar.getInstance().getTime());
+				updateParams.put("responseTimelong", Double.valueOf((Calendar.getInstance().getTimeInMillis() - start)/1000 +"."+ (Calendar.getInstance().getTimeInMillis() - start)%1000));
+				updateParams.put("callbackSuccess", apiSuccess);
+				updateParams.put("callbackResult", callbackResult);
+				updateParams.put("responseResult", apiResult);
+				apiInvokeRecordMapper.update(updateParams);
 			}
 		}
 				
