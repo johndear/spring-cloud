@@ -1,21 +1,14 @@
 package spring.cloud.web;
 
-import java.io.File;
-import java.io.IOException;
-import java.net.URL;
 import java.util.ArrayList;
-import java.util.Enumeration;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.BeansException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
-
-import spring.cloud.jobs.SyncCallbackResultJob;
 
 @Component
 public class SpringUtil implements ApplicationContextAware {
@@ -27,13 +20,8 @@ public class SpringUtil implements ApplicationContextAware {
 			throws BeansException {
 
 		if (SpringUtil.applicationContext == null) {
-
 			SpringUtil.applicationContext = applicationContext;
-
 		}
-		
-		
-
 	}
 
 	// 获取applicationContext
