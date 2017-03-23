@@ -11,19 +11,19 @@ import org.springframework.stereotype.Service;
 import spring.cloud.dto.AmountExtractDirectionEnum;
 import spring.cloud.dto.CollectTypeEnum;
 import spring.cloud.mapper.ds1.JournalizingInfoMapper;
-import spring.cloud.service.ICountService;
+import spring.cloud.service.Computable;
 import spring.cloud.utils.DateUtil;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
 @Service("fun_extract_amount")
-public class ExtractAmountService implements ICountService{
+public class ExtractAmountService implements Computable{
 	
 	@Autowired
     private JournalizingInfoMapper userMapper;
 	
-    public Object invoke(JSONObject newJson) throws Exception{
+    public Object compute(JSONObject newJson) throws Exception{
     	final String params = newJson.getString("params");
     	JSONArray newAccountInfo = JSONArray.parseArray(params);
     	
