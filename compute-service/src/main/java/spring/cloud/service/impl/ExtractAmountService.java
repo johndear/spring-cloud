@@ -71,7 +71,7 @@ public class ExtractAmountService implements Computable{
 	 * 统计维度：科目     提取方向     数据来源   汇总方法     核算有效期
      * @throws Exception 
 	 */
-	public int borrowAmount(String id, String companyId, String extractTypeStr, String datasource, String collectTypeStr, String startDate, String endDate) throws Exception{
+	public double borrowAmount(String id, String companyId, String extractTypeStr, String datasource, String collectTypeStr, String startDate, String endDate) throws Exception{
 		AmountExtractDirectionEnum amountExtractDirection = AmountExtractDirectionEnum.getEnum(extractTypeStr);
 		if(amountExtractDirection == null){
 			throw new Exception("目前只支持【借、贷 、借减贷、贷减借】提取方向");
@@ -81,7 +81,7 @@ public class ExtractAmountService implements Computable{
 			throw new Exception("目前只支持【汇总科目金额、汇总科目及其子科目金额】汇总方法 ");
 		}
 		
-		Integer amount = 0;
+		double amount = 0;
 		// 单向：借、贷
 		if(AmountExtractDirectionEnum.DEBIT == amountExtractDirection || AmountExtractDirectionEnum.CREDIT == amountExtractDirection){
 			if(CollectTypeEnum.TYPE0 == collectType){
@@ -93,7 +93,7 @@ public class ExtractAmountService implements Computable{
 		// 双向：借减贷、贷减借
 		}else{
 			// 借减贷
-			int a,b;
+			double a,b;
 			if(CollectTypeEnum.TYPE0 == collectType){
 				a = journalizingInfoMapper.sumContainChildrenSubject(id, companyId, AmountExtractDirectionEnum.DEBIT.getValue(), datasource, startDate, endDate);
 				b = journalizingInfoMapper.sumContainChildrenSubject(id, companyId, AmountExtractDirectionEnum.CREDIT.getValue(), datasource, startDate, endDate);

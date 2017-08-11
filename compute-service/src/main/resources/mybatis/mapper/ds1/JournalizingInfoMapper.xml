@@ -2,28 +2,32 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="spring.cloud.mapper.ds1.JournalizingInfoMapper" >
 
-    <select id="sumCurrentSubject" resultType="java.lang.Integer">
+    <select id="sumCurrentSubject" resultType="java.lang.Double">
 		SELECT 
 		  IFNULL(SUM(amount),0)
 		FROM
 		  journalizing_info 
-		WHERE item_id = #{id}
+		WHERE item_code = #{id}
 		  AND company_id = #{companyId}
 		  AND TYPE = #{type} 
-		  AND data_source = #{datasource} 
+		  <if test="datasource!=2">
+		  	AND data_source = #{datasource}
+		  </if>
 		  AND occurrence_time BETWEEN #{startDate}
 		  AND #{endDate} 
   </select>
   
-  <select id="sumContainChildrenSubject" resultType="java.lang.Integer">
+  <select id="sumContainChildrenSubject" resultType="java.lang.Double">
 		SELECT 
 		  IFNULL(SUM(amount),0) 
 		FROM
 		  journalizing_info 
-		WHERE (item_id=#{id} or item_id in (SELECT child_id FROM doc_item_level WHERE parent_id=#{id}))
+		WHERE item_code like concat(#{id},'%')
 		  AND company_id = #{companyId}
 		  AND TYPE = #{type} 
-		  AND data_source = #{datasource} 
+		  <if test="datasource!=2">
+		  	AND data_source = #{datasource}
+		  </if> 
 		  AND occurrence_time BETWEEN #{startDate}
 		  AND #{endDate}  
   </select>
