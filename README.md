@@ -2,6 +2,8 @@
 
 * eureka --- 注册服务器（等同于zookeeper）
 
+* config --- 统一配置中心
+
 客户端技术
 
     * ribbon --- 服务消费者（Ribbon是一个基于HTTP和TCP客户端。实现客户端的均衡负载）
